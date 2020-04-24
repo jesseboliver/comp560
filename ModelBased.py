@@ -25,25 +25,7 @@ class inputReader():
             probabilities.append(x[i+3])
         return (states, shots, ends, probabilities)
 
-def Putt(states, shots, ends, probabilities, shotlist, probabilitylist, endlist, state, shot):
-    for i in range(len(states)):
-        if states[i] == state:
-            if shots[i] == shot:
-                shotlist.append(shots[i])
-                probabilitylist.append((probabilities[i]))
-                endlist.append(ends[i])
-    probabilitylist = [float(i) for i in probabilitylist]
-    return endlist, probabilitylist
-            
-
-def main():
-    print(random())
-    ir = inputReader()
-    (states, shots, ends, probabilities) = ir.parseMapFromStdIn()
-    print(states)
-    print(shots)
-    print(ends)
-    print(probabilities)
+def Putt(states, shots, ends, probabilities):
     probabilitylist = []
     shotlist = []
     endlist = []
@@ -57,14 +39,30 @@ def main():
             i+=1
             continue
         visited.update({state:shot})
-        endlist, probabilitylist = Putt(states, shots, ends, probabilities, shotlist, probabilitylist, endlist, state, shot)
-        #print('State: ', state,',', 'Shot : ', shot,', ', 'endlist: ', endlist, ' ProbabilityList: ', p=probabilitylist)
+        for i in range(len(states)):
+            if states[i] == state:
+                if shots[i] == shot:
+                    shotlist.append(shots[i])
+                    probabilitylist.append((probabilities[i]))
+                    endlist.append(ends[i])
+        probabilitylist = [float(i) for i in probabilitylist]
         x = np.random.choice(endlist, 50, p=probabilitylist)
         print('State: ', state,',', 'Shot : ', shot,',', 'Visited: ', x)
 
         endlist.clear()
         probabilitylist.clear()
+    return 
+            
 
+def main():
+    print(random())
+    ir = inputReader()
+    (states, shots, ends, probabilities) = ir.parseMapFromStdIn()
+    print(states)
+    print(shots)
+    print(ends)
+    print(probabilities)
+    Putt(states, shots, ends, probabilities)
 
 if __name__ == "__main__":
     main()
